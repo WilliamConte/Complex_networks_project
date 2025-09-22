@@ -1,3 +1,4 @@
+# Repo Overview
 This repository contains the final project for the Physics of Complex Networks course, consisting of two complementary tasks that explore both theoretical modeling and practical network analysis.
 
 This project consists of two main tasks:

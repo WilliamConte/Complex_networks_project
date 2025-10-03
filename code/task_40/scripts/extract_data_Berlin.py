@@ -1,238 +1,35 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "d12bbaf2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import numpy as np \n",
-    "import pandas as pd\n",
-    "import matplotlib.pyplot as plt\n",
-    "import igraph as ig\n",
-    "from io import StringIO\n",
-    "import glob\n",
-    "import os\n",
-    "from helper_functions import *\n",
-    "from extract_data_pipeline import *"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "id": "6d7f6475",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1902-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1903-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1904-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1905-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1906-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1907-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1908-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1909-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1910-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1911-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1912-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1913-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1914-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1915-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1916-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1917-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1918-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1919-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1920-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1921-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1922-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1923-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1924-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1925-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1926-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1927-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1928-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1929-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1930-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1931-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1932-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1933-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1934-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1935-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1936-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1937-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1938-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1939-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1940-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1941-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1942-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1943-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1944-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1945-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1946-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1947-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1948-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1949-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1950-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1951-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1952-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1953-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1954-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1955-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1956-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1957-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1958-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1959-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1960-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1961-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1962-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1963-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1964-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1965-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1966-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1967-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1968-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1969-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1970-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1971-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1972-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1973-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1974-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1975-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1976-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1977-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1978-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1979-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1980-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1981-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1982-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1983-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1984-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1985-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1986-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1987-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1988-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1989-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1990-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1991-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1992-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1993-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1994-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1995-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1996-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1997-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1998-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-1999-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2000-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2001-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2002-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2003-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2004-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2005-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2006-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2007-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2008-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2009-matrix.mat\n",
-      "Processing: ./Berlin/Berlin-topologies/Berlin-2010-matrix.mat\n",
-      "./Berlin/berlin-u*.txt\n",
-      "./Berlin/berlin-alteu3*.txt\n",
-      "./Berlin/berlin-neueu3*.txt\n",
-      "Processing: ./Berlin/berlin-alteu3.txt\n",
-      "Processing: ./Berlin/berlin-neueu3.txt\n",
-      "Processing: ./Berlin/berlin-u1.txt\n",
-      "Processing: ./Berlin/berlin-u2.txt\n",
-      "Processing: ./Berlin/berlin-u4.txt\n",
-      "Processing: ./Berlin/berlin-u5.txt\n",
-      "Processing: ./Berlin/berlin-u55.txt\n",
-      "Processing: ./Berlin/berlin-u6.txt\n",
-      "Processing: ./Berlin/berlin-u7.txt\n",
-      "Processing: ./Berlin/berlin-u8.txt\n",
-      "Processing: ./Berlin/berlin-u9.txt\n",
-      "     nodeID_from  nodeID_to  year    line\n",
-      "0             22         98  1903      u2\n",
-      "1             22        113  1903      u2\n",
-      "2             31        171  1903      u2\n",
-      "3             43         74  1903      u1\n",
-      "4             43        133  1903      u1\n",
-      "..           ...        ...   ...     ...\n",
-      "194           75        100  2005  neueu3\n",
-      "195          100        102  2005  neueu3\n",
-      "196          102        149  2005  neueu3\n",
-      "197           20         23  2010     u55\n",
-      "198           23         50  2010     u55\n",
-      "\n",
-      "[199 rows x 4 columns]\n",
-      "     nodeID_from  nodeID_to  year    line\n",
-      "0             22         98  1903      u2\n",
-      "1             22        113  1903      u2\n",
-      "2             31        171  1903      u2\n",
-      "3             43         74  1903      u1\n",
-      "4             43        133  1903      u1\n",
-      "..           ...        ...   ...     ...\n",
-      "194           75        100  2005  neueu3\n",
-      "195          100        102  2005  neueu3\n",
-      "196          102        149  2005  neueu3\n",
-      "197           20         23  2010     u55\n",
-      "198           23         50  2010     u55\n",
-      "\n",
-      "[199 rows x 4 columns]\n",
-      "before reset id (199, 6)\n",
-      "after reset id (199, 4)\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/home/william/complex_networks/projects/data_project/helper_functions.py:340: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`\n",
-      "  stations_grouped[0] = stations_grouped[0][stations_grouped[0] != 'Roosevel']\n",
-      "/home/william/complex_networks/projects/data_project/helper_functions.py:340: FutureWarning: Series.__setitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To set a value by position, use `ser.iloc[pos] = value`\n",
-      "  stations_grouped[0] = stations_grouped[0][stations_grouped[0] != 'Roosevel']\n"
-     ]
-    }
-   ],
-   "source": [
-    "file_pattern_topologies = \"./Berlin/Berlin-topologies/Berlin-*-matrix.mat\"\n",
-    "line_prefixes = [\"u\", \"alteu3\", \"neueu3\"]\n",
-    "filename_nodes = \"./Berlin/berlin-stations-positions-years.txt\"\n",
-    "output_edges = \"Berlin_edgelist.csv\"\n",
-    "output_nodes = \"Berlin_nodelist.csv\"\n",
-    "\n",
-    "extract_data_pipeline(file_pattern_topologies, None, filename_nodes, \n",
-    "                      output_edges, output_nodes, line_prefixes=line_prefixes, more_files=True)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "abf4b44b",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "python3_env",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.16"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+import igraph as ig
+from io import StringIO
+import glob
+import os
+from helper_functions import *
+from extract_data_pipeline import *
+
+
+# In[2]:
+
+
+file_pattern_topologies = "./Berlin/Berlin-topologies/Berlin-*-matrix.mat"
+line_prefixes = ["u", "alteu3", "neueu3"]
+filename_nodes = "./Berlin/berlin-stations-positions-years.txt"
+output_edges = "Berlin_edgelist.csv"
+output_nodes = "Berlin_nodelist.csv"
+
+extract_data_pipeline(file_pattern_topologies, None, filename_nodes, 
+                      output_edges, output_nodes, line_prefixes=line_prefixes, more_files=True)
+
+
+# In[ ]:
+
+
+
+

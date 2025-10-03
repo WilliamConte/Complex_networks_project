@@ -1,216 +1,36 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "ade568bb",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import numpy as np \n",
-    "import pandas as pd\n",
-    "import matplotlib.pyplot as plt\n",
-    "import igraph as ig\n",
-    "from io import StringIO\n",
-    "import glob\n",
-    "import os\n",
-    "from helper_functions import *\n",
-    "from extract_data_pipeline import *"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "id": "98585e38",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1913-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1914-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1915-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1916-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1917-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1918-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1919-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1920-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1921-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1922-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1923-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1924-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1925-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1926-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1927-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1928-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1929-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1930-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1931-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1932-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1933-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1934-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1935-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1936-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1937-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1938-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1939-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1940-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1941-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1942-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1943-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1944-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1945-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1946-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1947-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1948-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1949-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1950-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1951-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1952-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1953-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1954-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1955-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1956-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1957-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1958-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1959-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1960-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1961-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1962-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1963-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1964-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1965-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1966-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1967-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1968-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1969-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1970-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1971-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1972-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1973-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1974-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1975-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1976-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1977-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1978-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1979-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1980-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1981-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1982-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1983-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1984-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1985-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1986-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1987-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1988-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1989-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1990-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1991-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1992-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1993-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1994-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1995-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1996-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1997-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1998-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-1999-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2000-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2001-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2002-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2003-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2004-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2005-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2006-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2007-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2008-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2009-matrix.mat\n",
-      "Processing: ./Barcelona/Barcelona-topologies/Barcelona-2010-matrix.mat\n",
-      "Line\n",
-      "Line1     [ArcdeTriomf, AvingudaCarrilet, BarodeViver, B...\n",
-      "Line10    [Besos, LaSagrera, LaSalut, Lesseps, Maragall,...\n",
-      "Line11    [CanCuias, Casadel'Aigua, CiutatMeridiana, Tor...\n",
-      "Line2     [Artigues-SantAdria, BacdeRoda, BadalonaCentre...\n",
-      "Line4     [Canyelles, DiagonalProvenca, Drassanes, Fonta...\n",
-      "Line5     [Badal, Campdel'Arpa, CanBoixeres, CanVidalet,...\n",
-      "Line6     [LaBonanova, LesTresTorres, Muntaner, PlacaCat...\n",
-      "Line7     [AvingudaTibidabo, ElPutxet, Gracia, Padua, Pl...\n",
-      "Line8     [Almeda, AvingudaCarrilet, Cornella-Riera, Eur...\n",
-      "Line9     [BonPastor, CanPeixauet, CanZam, EsglesiaMajor...\n",
-      "Name: Station, dtype: object\n",
-      "     nodeID_from  nodeID_to  year    line\n",
-      "0             51        109  1913    None\n",
-      "1             22        102  1925   Line4\n",
-      "2             22        131  1925   Line4\n",
-      "3             33         69  1925   Line4\n",
-      "4             33         71  1925   Line4\n",
-      "..           ...        ...   ...     ...\n",
-      "175           55         76  2010   Line9\n",
-      "176           64         76  2010  Line10\n",
-      "177           64        104  2010  Line10\n",
-      "178           86        104  2010  Line10\n",
-      "179          117        138  2010  Line10\n",
-      "\n",
-      "[180 rows x 4 columns]\n",
-      "     nodeID_from  nodeID_to  year     line\n",
-      "0             51        109  1913  unknown\n",
-      "1             22        102  1925    Line4\n",
-      "2             22        131  1925    Line4\n",
-      "3             33         69  1925    Line4\n",
-      "4             33         71  1925    Line4\n",
-      "..           ...        ...   ...      ...\n",
-      "175           55         76  2010    Line9\n",
-      "176           64         76  2010   Line10\n",
-      "177           64        104  2010   Line10\n",
-      "178           86        104  2010   Line10\n",
-      "179          117        138  2010   Line10\n",
-      "\n",
-      "[180 rows x 4 columns]\n",
-      "before reset id (180, 6)\n",
-      "after reset id (180, 4)\n"
-     ]
-    }
-   ],
-   "source": [
-    "file_pattern_topologies = \"./Barcelona/Barcelona-topologies/Barcelona-*-matrix.mat\"\n",
-    "file_lines = \"./Barcelona/barcelona-stations-positions-years+.txt\"\n",
-    "line_prefixes = [\"Line\"]\n",
-    "filename_nodes = \"./Barcelona/barcelona-stations-positions-years.txt\"\n",
-    "output_edges = \"Barcelona_edgelist.csv\"\n",
-    "output_nodes = \"Barcelona_nodelist.csv\"\n",
-    "\n",
-    "extract_data_pipeline(file_pattern_topologies, file_lines, filename_nodes, \n",
-    "                      output_edges, output_nodes, line_prefixes=line_prefixes)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "8d9a8098",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "python3_env",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.16"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+import igraph as ig
+from io import StringIO
+import glob
+import os
+from helper_functions import *
+from extract_data_pipeline import *
+
+
+# In[2]:
+
+
+file_pattern_topologies = "./Barcelona/Barcelona-topologies/Barcelona-*-matrix.mat"
+file_lines = "./Barcelona/barcelona-stations-positions-years+.txt"
+line_prefixes = ["Line"]
+filename_nodes = "./Barcelona/barcelona-stations-positions-years.txt"
+output_edges = "Barcelona_edgelist.csv"
+output_nodes = "Barcelona_nodelist.csv"
+
+extract_data_pipeline(file_pattern_topologies, file_lines, filename_nodes, 
+                      output_edges, output_nodes, line_prefixes=line_prefixes)
+
+
+# In[ ]:
+
+
+
+

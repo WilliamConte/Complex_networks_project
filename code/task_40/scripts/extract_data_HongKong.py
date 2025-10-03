@@ -1,225 +1,35 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "3708180c",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import numpy as np \n",
-    "import pandas as pd\n",
-    "import matplotlib.pyplot as plt\n",
-    "import igraph as ig\n",
-    "from io import StringIO\n",
-    "import glob\n",
-    "import os\n",
-    "from helper_functions import *\n",
-    "from extract_data_pipeline import *"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "id": "b97fd17e",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1910-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1911-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1912-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1913-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1914-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1915-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1916-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1917-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1918-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1919-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1920-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1921-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1922-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1923-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1924-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1925-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1926-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1927-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1928-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1929-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1930-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1931-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1932-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1933-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1934-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1935-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1936-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1937-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1938-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1939-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1940-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1941-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1942-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1943-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1944-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1945-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1946-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1947-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1948-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1949-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1950-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1951-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1952-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1953-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1954-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1955-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1956-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1957-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1958-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1959-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1960-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1961-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1962-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1963-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1964-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1965-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1966-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1967-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1968-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1969-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1970-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1971-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1972-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1973-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1974-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1975-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1976-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1977-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1978-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1979-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1980-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1981-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1982-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1983-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1984-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1985-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1986-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1987-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1988-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1989-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1990-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1991-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1992-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1993-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1994-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1995-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1996-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1997-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1998-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-1999-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2000-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2001-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2002-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2003-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2004-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2005-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2006-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2007-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2008-matrix.mat\n",
-      "Processing: ./HongKong/HongKong-topologies/HongKong-2009-matrix.mat\n",
-      "./HongKong/HK-line*.txt\n",
-      "Processing: ./HongKong/HK-line1.txt\n",
-      "Processing: ./HongKong/HK-line10.txt\n",
-      "Processing: ./HongKong/HK-line11.txt\n",
-      "Processing: ./HongKong/HK-line2.txt\n",
-      "Processing: ./HongKong/HK-line3.txt\n",
-      "Processing: ./HongKong/HK-line4.txt\n",
-      "Processing: ./HongKong/HK-line5.txt\n",
-      "Processing: ./HongKong/HK-line6.txt\n",
-      "Processing: ./HongKong/HK-line7.txt\n",
-      "Processing: ./HongKong/HK-line8.txt\n",
-      "Processing: ./HongKong/HK-line9.txt\n",
-      "    nodeID_from  nodeID_to  year    line\n",
-      "0             1          4  1911   line1\n",
-      "1             4          8  1911   line1\n",
-      "2             8         10  1911   line1\n",
-      "3            10         11  1931   line1\n",
-      "4            11         12  1950   line1\n",
-      "..          ...        ...   ...     ...\n",
-      "91           59         60  2006   line5\n",
-      "92           60         61  2006   line5\n",
-      "93           60        102  2006  line10\n",
-      "94           67         68  2006   line6\n",
-      "95           12         13  2008   line1\n",
-      "\n",
-      "[96 rows x 4 columns]\n",
-      "    nodeID_from  nodeID_to  year    line\n",
-      "0             1          4  1911   line1\n",
-      "1             4          8  1911   line1\n",
-      "2             8         10  1911   line1\n",
-      "3            10         11  1931   line1\n",
-      "4            11         12  1950   line1\n",
-      "..          ...        ...   ...     ...\n",
-      "91           59         60  2006   line5\n",
-      "92           60         61  2006   line5\n",
-      "93           60        102  2006  line10\n",
-      "94           67         68  2006   line6\n",
-      "95           12         13  2008   line1\n",
-      "\n",
-      "[96 rows x 4 columns]\n",
-      "before reset id (96, 6)\n",
-      "after reset id (96, 4)\n"
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/home/william/complex_networks/projects/data_project/helper_functions.py:340: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`\n",
-      "  stations_grouped[0] = stations_grouped[0][stations_grouped[0] != 'Roosevel']\n",
-      "/home/william/complex_networks/projects/data_project/helper_functions.py:340: FutureWarning: Series.__setitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To set a value by position, use `ser.iloc[pos] = value`\n",
-      "  stations_grouped[0] = stations_grouped[0][stations_grouped[0] != 'Roosevel']\n"
-     ]
-    }
-   ],
-   "source": [
-    "file_pattern_topologies = \"./HongKong/HongKong-topologies/HongKong-*-matrix.mat\"\n",
-    "file_lines = \"./HongKong/HK-stations-times.txt\"\n",
-    "line_prefixes = [\"line\"]\n",
-    "filename_nodes = file_lines\n",
-    "\n",
-    "city_path = \"./HongKong\"\n",
-    "file_prefix = \"HK-\"\n",
-    "file_suffix = \".txt\"\n",
-    "\n",
-    "output_edges = \"HongKong_edgelist.csv\"\n",
-    "output_nodes = \"HongKong_nodelist.csv\"\n",
-    "\n",
-    "extract_data_pipeline(file_pattern_topologies, file_lines, filename_nodes, output_edges, output_nodes, city_path = city_path, \n",
-    "                      file_prefix = file_prefix, file_suffix = file_suffix,  line_prefixes=line_prefixes, more_files = True)"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "python3_env",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.16"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+import igraph as ig
+from io import StringIO
+import glob
+import os
+from helper_functions import *
+from extract_data_pipeline import *
+
+
+# In[2]:
+
+
+file_pattern_topologies = "./HongKong/HongKong-topologies/HongKong-*-matrix.mat"
+file_lines = "./HongKong/HK-stations-times.txt"
+line_prefixes = ["line"]
+filename_nodes = file_lines
+
+city_path = "./HongKong"
+file_prefix = "HK-"
+file_suffix = ".txt"
+
+output_edges = "HongKong_edgelist.csv"
+output_nodes = "HongKong_nodelist.csv"
+
+extract_data_pipeline(file_pattern_topologies, file_lines, filename_nodes, output_edges, output_nodes, city_path = city_path, 
+                      file_prefix = file_prefix, file_suffix = file_suffix,  line_prefixes=line_prefixes, more_files = True)
+
